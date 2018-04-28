@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<autofac>
+  <components name="0">
+    <type>SqlSugarDao.DataAccess, SqlSugarDao</type>
+    <services name="IDataAccess" type="SqlSugarDao.IDataAccess" />
+    <injectProperties>true</injectProperties>
+  </components>
+  <components name="1">
+    <type>TestDal.GroupRepository, TestDal</type>
+    <services name="IGroupRepository" type="TestDal.IGroupRepository" />
+    <injectProperties>true</injectProperties>
+  </components>
+</autofac>

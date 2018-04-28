@@ -1,0 +1,20 @@
+﻿{
+  "components": [
+    {
+      "type": "SqlSugarDao.DataAccess,SqlSugarDao",
+      "services": [
+        { "type": "SqlSugarDao.IDataAccess,SqlSugarDao" }
+      ],
+      "autoActivate": true,
+      "injectProperties": true
+    },
+    {
+      "type": "TestDal.GroupRepository,TestDal",
+      "services": [
+        { "type": "TestDal.IGroupRepository,TestDal" }
+      ],
+      "autoActivate": true,
+      "injectProperties": true
+    }
+  ]
+}
