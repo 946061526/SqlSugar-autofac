@@ -1,6 +1,7 @@
 ﻿using SqlSugar;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -91,5 +92,62 @@ namespace SqlSugarDao
         {
             return _db.Queryable<T>().Where(where).OrderBy(orderBy).ToPageList(pageIndex, pageSize, ref total);
         }
+
+
+        #region Ado操作，执行sql语句
+        public IEnumerable<TReturn> SqlQuery<TReturn>(string sql, IDictionary<string, object> dic = null) where TReturn : class, new()
+        {
+            //var dt = _db.Ado.GetDataTable("select * from table where id=@id", new SugarParameter("@id", 1));
+
+            //var dt = _db.Ado.GetDataTable("select * from table where id=@id and name=@name", new SugarParameter[]{
+            //  new SugarParameter("@id",1),
+            //  new SugarParameter("@name",2)
+            //});
+            return _db.Ado.SqlQuery<TReturn>(sql, dic);
+        }
+
+        public TReturn SqlQuerySingle<TReturn>(string sql, IDictionary<string, object> dic = null) where TReturn : class, new()
+        {
+            return _db.Ado.SqlQuerySingle<TReturn>(sql, dic);
+        }
+
+        public DataSet GetDataSet(string sql, IDictionary<string, object> dic = null)
+        {
+            return _db.Ado.GetDataSetAll(sql, dic);
+        }
+
+        public DataTable GetDataTable(string sql, IDictionary<string, object> dic = null)
+        {
+            return _db.Ado.GetDataTable(sql, dic);
+        }
+
+        public int ExecuteSql(string sql, IDictionary<string, object> dic = null, bool isTran = false)
+        {
+            if (isTran)
+            {
+                var result = _db.Ado.UseTran(() =>
+                {
+                    return _db.Ado.ExecuteCommand(sql, dic);
+                });
+                return result.IsSuccess ? result.Data : 0;
+            }
+            return _db.Ado.ExecuteCommand(sql, dic);
+        }
+
+        public int GetInt(string sql, IDictionary<string, object> dic = null)
+        {
+            return _db.Ado.GetInt(sql, dic);
+        }
+
+        public string GetString(string sql, IDictionary<string, object> dic = null)
+        {
+            return _db.Ado.GetString(sql, dic);
+        }
+
+        public decimal GetDecimal(string sql, IDictionary<string, object> dic = null)
+        {
+            return _db.Ado.GetDecimal(sql, dic);
+        }
+        #endregion
     }
 }

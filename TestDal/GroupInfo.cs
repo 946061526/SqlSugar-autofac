@@ -11,6 +11,7 @@ namespace TestDal
         /// <summary>
         /// 用户组编号
         /// </summary>
+        //[SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
         public int Id { get; set; }
         /// <summary>
         /// 用户组名称

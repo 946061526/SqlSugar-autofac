@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -60,7 +61,7 @@ namespace SqlSugarDao
         /// </summary>
         /// <typeparam name="T">表实体</typeparam>
         /// <param name="where">查询条件,如where id=@id</param>
-        /// <param name="parameters">条件参数，如new SugarParameter("@id",1)</param>
+        /// <param name="parameters">条件参数，如new SugarParameter("@id",1) 或 new { id = 1 }</param>
         /// <returns></returns>
         T Get<T>(string where, object parameters) where T : class, new();
         /// <summary>
@@ -76,5 +77,69 @@ namespace SqlSugarDao
         List<T> GetListPage<T>(string where, object parameters, string orderBy, int pageIndex, int pageSize, ref int total) where T : class, new();
         List<T> GetListPage<T>(Expression<Func<T, bool>> where, string orderBy, int pageIndex, int pageSize, ref int total) where T : class, new();
 
+
+        #region Ado操作
+        /// <summary>
+        /// sql查询
+        /// </summary>
+        /// <typeparam name="TReturn">查询返回实体</typeparam>
+        /// <param name="sql">sql字符串</param>
+        /// <param name="dic">字典</param>
+        /// <returns>返回实体</returns>
+        IEnumerable<TReturn> SqlQuery<TReturn>(string sql, IDictionary<string, object> dic = null) where TReturn : class, new();
+        /// <summary>
+        /// sql查询
+        /// </summary>
+        /// <typeparam name="TReturn"></typeparam>
+        /// <param name="sql"></param>
+        /// <param name="dic"></param>
+        /// <returns></returns>
+        TReturn SqlQuerySingle<TReturn>(string sql, IDictionary<string, object> dic = null) where TReturn : class, new();
+        /// <summary>
+        /// sql查询
+        /// </summary>
+        /// <param name="sql">sql字符串</param>
+        /// <param name="dic">字典</param>
+        /// <returns>返回datatable</returns>
+        DataTable GetDataTable(string sql, IDictionary<string, object> dic = null);
+        /// <summary>
+        /// sql查询
+        /// </summary>
+        /// <param name="sql">sql字符串</param>
+        /// <param name="dic">字典</param>
+        /// <returns>返回dataset</returns>
+        DataSet GetDataSet(string sql, IDictionary<string, object> dic = null);
+
+        /// <summary>
+        /// 执行sql
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="dic"></param>
+        /// <param name="isTran"></param>
+        /// <returns></returns>
+        int ExecuteSql(string sql, IDictionary<string, object> dic = null, bool isTran = false);
+
+        /// <summary>
+        /// 获取首行首列
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="dic"></param>
+        /// <returns></returns>
+        int GetInt(string sql, IDictionary<string, object> dic = null);
+        /// <summary>
+        /// 获取首行首列
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="dic"></param>
+        /// <returns></returns>
+        string GetString(string sql, IDictionary<string, object> dic = null);
+        /// <summary>
+        /// 获取首行首列
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="dic"></param>
+        /// <returns></returns>
+        decimal GetDecimal(string sql, IDictionary<string, object> dic = null);
+        #endregion
     }
 }

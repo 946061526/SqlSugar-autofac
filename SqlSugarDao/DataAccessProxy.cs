@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -85,5 +86,47 @@ namespace SqlSugarDao
         {
             return _dataAccess.GetListPage(where, orderBy, pageIndex, pageSize, ref total);
         }
+
+        #region Ado操作
+        public IEnumerable<TReturn> SqlQuery<TReturn>(string sql, IDictionary<string, object> dic = null) where TReturn : class, new()
+        {
+            return _dataAccess.SqlQuery<TReturn>(sql, dic);
+        }
+
+        public TReturn SqlQuerySingle<TReturn>(string sql, IDictionary<string, object> dic = null) where TReturn : class, new()
+        {
+            return _dataAccess.SqlQuerySingle<TReturn>(sql, dic);
+        }
+
+        public DataSet GetDataSet(string sql, IDictionary<string, object> dic = null)
+        {
+            return _dataAccess.GetDataSet(sql, dic);
+        }
+
+        public DataTable GetDataTable(string sql, IDictionary<string, object> dic = null)
+        {
+            return _dataAccess.GetDataTable(sql, dic);
+        }
+
+        public int ExecuteSql(string sql, IDictionary<string, object> dic = null, bool isTran = false)
+        {
+            return _dataAccess.ExecuteSql(sql, dic, isTran);
+        }
+
+        public int GetInt(string sql, IDictionary<string, object> dic = null)
+        {
+            return _dataAccess.GetInt(sql, dic);
+        }
+
+        public string GetString(string sql, IDictionary<string, object> dic = null)
+        {
+            return _dataAccess.GetString(sql, dic);
+        }
+
+        public decimal GetDecimal(string sql, IDictionary<string, object> dic = null)
+        {
+            return _dataAccess.GetDecimal(sql, dic);
+        }
+        #endregion
     }
 }

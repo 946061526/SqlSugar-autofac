@@ -9,6 +9,9 @@ namespace Utility
     public class IocContainer
     {
         private static IContainer _IContainer = null;
+        /// <summary>
+        /// IOC注入
+        /// </summary>
         public static void Register()
         {
             //将配置添加到ConfigurationBuilder
