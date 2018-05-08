@@ -20,7 +20,8 @@ namespace SqlSugarDemo
             Application.SetCompatibleTextRenderingDefault(false);
 
 
-            IocContainer.Register();
+            //IocContainer.Register();
+            IocContainer.Configure();
             //return;
             TestSugar();
         }
@@ -36,10 +37,10 @@ namespace SqlSugarDemo
                 r = IocContainer.Resolve<IGroupRepository>().Add(group);
 
                 //edit
-                group = new GroupInfo() { Id = 24, GroupName = "testsqlsugar24", Remark = "test24" };
+                group = new GroupInfo() { Id = 25, GroupName = "testsqlsugar25", Remark = "test25" };
                 r = IocContainer.Resolve<IGroupRepository>().Edit(group);
 
-                var l = IocContainer.Resolve<IGroupRepository>().Get(24);
+                var l = IocContainer.Resolve<IGroupRepository>().Get(25);
 
                 var n = IocContainer.Resolve<IGroupRepository>().Delete(new int[] { 18, 19, 20, 21, 22, 23 }, false);
 
