@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TestDal
 {
+    //[SugarTable("GroupInfo")]
     public class GroupInfo
     {
         /// <summary>
@@ -20,6 +21,7 @@ namespace TestDal
         /// <summary>
         /// 备注
         /// </summary>
+        //[SugarColumn(ColumnName = "Remark")]
         public string Remark { get; set; }
     }
 }
