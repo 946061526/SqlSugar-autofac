@@ -17,6 +17,7 @@ namespace SqlSugarDao
             _dataAccess = Utility.IocContainer.Resolve<IDataAccess>();
         }
 
+        #region 插入
         /// <summary>
         /// 插入一个实体
         /// </summary>
@@ -39,6 +40,9 @@ namespace SqlSugarDao
         {
             return _dataAccess.Add(entitys, pk);
         }
+        #endregion
+
+        #region 删除
         /// <summary>
         /// 按主键批量删除(物理删除)
         /// </summary>
@@ -80,6 +84,9 @@ namespace SqlSugarDao
         {
             return _dataAccess.Delete(where);
         }
+        #endregion
+
+        #region 修改
         /// <summary>
         /// 更新实体
         /// </summary>
@@ -102,6 +109,9 @@ namespace SqlSugarDao
         {
             return _dataAccess.Edit(entity, columns, where);
         }
+        #endregion
+
+        #region 查询单个
         /// <summary>
         /// 查询单个实体
         /// </summary>
@@ -133,6 +143,9 @@ namespace SqlSugarDao
         {
             return _dataAccess.Get(where);
         }
+        #endregion
+
+        #region 查询总条数
         /// <summary>
         /// 查询汇总条数
         /// </summary>
@@ -154,6 +167,9 @@ namespace SqlSugarDao
         {
             return _dataAccess.GetCount(where);
         }
+        #endregion
+
+        #region 查询列表
         /// <summary>
         /// 查询列表
         /// </summary>
@@ -177,6 +193,9 @@ namespace SqlSugarDao
         {
             return _dataAccess.GetList(where, orderBy);
         }
+        #endregion
+
+        #region 查询分页
         /// <summary>
         /// 查询分页
         /// </summary>
@@ -206,6 +225,58 @@ namespace SqlSugarDao
         {
             return _dataAccess.GetListPage(where, orderBy, pageIndex, pageSize, ref total);
         }
+        #endregion
+
+        #region 多表查询
+        /// <summary>
+        /// 两表join
+        /// </summary>
+        /// <typeparam name="T">表1</typeparam>
+        /// <typeparam name="T2">表2</typeparam>
+        /// <typeparam name="TResult">返回的内容实体</typeparam>
+        /// <param name="joinExpression">连接条件</param>
+        /// <param name="where">查询条件</param>
+        /// <param name="orderBy">排序条件</param>
+        /// <param name="selectColumns">返回的实体字段</param>
+        /// <returns></returns>
+        public static List<TResult> GetList<T, T2, TResult>(Expression<Func<T, T2, object[]>> joinExpression, Expression<Func<T, bool>> where, Expression<Func<T, T2, object>> orderBy, Expression<Func<T, T2, TResult>> selectColumns) where T : class, new()
+        {
+            return _dataAccess.GetList(joinExpression, where, orderBy, selectColumns);
+        }
+        /// <summary>
+        /// 三表join
+        /// </summary>
+        /// <typeparam name="T">表1</typeparam>
+        /// <typeparam name="T2">表2</typeparam>
+        /// <typeparam name="T3">表3</typeparam>
+        /// <typeparam name="TResult">返回的内容实体</typeparam>
+        /// <param name="joinExpression">连接条件</param>
+        /// <param name="where">查询条件</param>
+        /// <param name="orderBy">排序条件</param>
+        /// <param name="selectColumns">返回的实体字段</param>
+        /// <returns></returns>
+        public static List<TResult> GetList<T, T2, T3, TResult>(Expression<Func<T, T2, T3, object[]>> joinExpression, Expression<Func<T, bool>> where, Expression<Func<T, T2, object>> orderBy, Expression<Func<T, T2, T3, TResult>> selectColumns) where T : class, new()
+        {
+            return _dataAccess.GetList(joinExpression, where, orderBy, selectColumns);
+        }
+        /// <summary>
+        /// 四表join
+        /// </summary>
+        /// <typeparam name="T">表1</typeparam>
+        /// <typeparam name="T2">表2</typeparam>
+        /// <typeparam name="T3">表3</typeparam>
+        /// <typeparam name="T4">表4</typeparam>
+        /// <typeparam name="TResult">返回的内容实体</typeparam>
+        /// <param name="joinExpression">连接条件</param>
+        /// <param name="where">查询条件</param>
+        /// <param name="orderBy">排序条件</param>
+        /// <param name="selectColumns">返回的实体字段</param>
+        /// <returns></returns>
+        public static List<TResult> GetList<T, T2, T3, T4, TResult>(Expression<Func<T, T2, T3, T4, object[]>> joinExpression, Expression<Func<T, bool>> where, Expression<Func<T, T2, object>> orderBy, Expression<Func<T, T2, T3, T4, TResult>> selectColumns) where T : class, new()
+        {
+            return _dataAccess.GetList(joinExpression, where, orderBy, selectColumns);
+        }
+        #endregion
 
         #region Ado操作
         /// <summary>

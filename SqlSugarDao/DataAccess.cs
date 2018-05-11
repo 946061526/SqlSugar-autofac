@@ -15,6 +15,7 @@ namespace SqlSugarDao
             _db = DbFactory.DbClient;
         }
 
+        #region 插入
         /// <summary>
         /// 插入一个实体
         /// </summary>
@@ -24,10 +25,11 @@ namespace SqlSugarDao
         /// <returns>long</returns>
         public long Add<T>(T entity, Expression<Func<T, object>> pk = null) where T : class, new()
         {
+            IInsertable<T> r = _db.Insertable(entity);
             if (pk != null)
-                return _db.Insertable(entity).IgnoreColumns(pk).ExecuteReturnIdentity();
-            else
-                return _db.Insertable(entity).ExecuteReturnIdentity();
+                r = r.IgnoreColumns(pk);
+
+            return r.ExecuteReturnIdentity();
         }
         /// <summary>
         /// 插入一个实体
@@ -38,11 +40,15 @@ namespace SqlSugarDao
         /// <returns>本批次最大主键ID</returns>
         public long Add<T>(T[] entitys, Expression<Func<T, object>> pk = null) where T : class, new()
         {
+            IInsertable<T> r = _db.Insertable(entitys);
             if (pk != null)
-                return _db.Insertable(entitys).IgnoreColumns(pk).ExecuteReturnIdentity();
-            else
-                return _db.Insertable(entitys).ExecuteReturnIdentity();
+                r = r.IgnoreColumns(pk);
+
+            return r.ExecuteReturnIdentity();
         }
+        #endregion
+
+        #region 删除
         /// <summary>
         /// 按主键批量删除(物理删除)
         /// </summary>
@@ -72,7 +78,11 @@ namespace SqlSugarDao
         /// <returns>int</returns>
         public int Delete<T>(string where, object parameters) where T : class, new()
         {
-            return _db.Deleteable<T>().Where(where, parameters).ExecuteCommand();
+            IDeleteable<T> r = _db.Deleteable<T>();
+            if (!string.IsNullOrEmpty(where))
+                r = r.Where(where, parameters);
+
+            return r.ExecuteCommand();
         }
         /// <summary>
         /// 按条件删除(物理删除)
@@ -84,6 +94,9 @@ namespace SqlSugarDao
         {
             return _db.Deleteable(where).ExecuteCommand();
         }
+        #endregion
+
+        #region 修改
         /// <summary>
         /// 更新实体
         /// </summary>
@@ -104,8 +117,15 @@ namespace SqlSugarDao
         /// <returns>受影响行数</returns>        
         public int Edit<T>(T entity, Expression<Func<T, T>> columns, Expression<Func<T, bool>> where) where T : class, new()
         {
-            return _db.Updateable(entity).UpdateColumns(columns).Where(where).ExecuteCommand();
+            IUpdateable<T> r = _db.Updateable(entity);
+            if (columns != null)
+                r = r.UpdateColumns(columns);
+
+            return r.Where(where).ExecuteCommand();
         }
+        #endregion
+
+        #region 查询单个
         /// <summary>
         /// 查询单个实体
         /// </summary>
@@ -137,6 +157,9 @@ namespace SqlSugarDao
         {
             return _db.Queryable<T>().Where(where).Single();
         }
+        #endregion
+
+        #region 查询总条数
         /// <summary>
         /// 查询汇总条数
         /// </summary>
@@ -146,7 +169,11 @@ namespace SqlSugarDao
         /// <returns></returns>
         public int GetCount<T>(string where, object parameters) where T : class, new()
         {
-            return _db.Queryable<T>().Where(where, parameters).Count();
+            ISugarQueryable<T> r = _db.Queryable<T>();
+            if (!string.IsNullOrEmpty(where))
+                r = r.Where(where, parameters);
+
+            return r.Count();
         }
         /// <summary>
         /// 查询单个实体
@@ -156,8 +183,15 @@ namespace SqlSugarDao
         /// <returns></returns>
         public int GetCount<T>(Expression<Func<T, bool>> where) where T : class, new()
         {
-            return _db.Queryable<T>().Where(where).Count();
+            ISugarQueryable<T> r = _db.Queryable<T>();
+            if (where != null)
+                r = r.Where(where);
+
+            return r.Count();
         }
+        #endregion
+
+        #region 查询列表
         /// <summary>
         /// 查询列表
         /// </summary>
@@ -168,7 +202,13 @@ namespace SqlSugarDao
         /// <returns></returns>
         public List<T> GetList<T>(string where, object parameters, string orderBy) where T : class, new()
         {
-            return _db.Queryable<T>().Where(where, parameters).OrderBy(orderBy).ToList();
+            ISugarQueryable<T> r = _db.Queryable<T>();
+            if (!string.IsNullOrEmpty(where))
+                r = r.Where(where);
+            if (!string.IsNullOrEmpty(orderBy))
+                r = r.OrderBy(orderBy);
+
+            return r.ToList();
         }
         /// <summary>
         /// 查询列表
@@ -179,8 +219,17 @@ namespace SqlSugarDao
         /// <returns></returns>
         public List<T> GetList<T>(Expression<Func<T, bool>> where, Expression<Func<T, object>> orderBy) where T : class, new()
         {
-            return _db.Queryable<T>().Where(where).OrderBy(orderBy).ToList();
+            ISugarQueryable<T> r = _db.Queryable<T>();
+            if (where != null)
+                r = r.Where(where);
+            if (orderBy != null)
+                r = r.OrderBy(orderBy);
+
+            return r.ToList();
         }
+        #endregion
+
+        #region 查询分页
         /// <summary>
         /// 查询分页
         /// </summary>
@@ -194,7 +243,13 @@ namespace SqlSugarDao
         /// <returns></returns>
         public List<T> GetListPage<T>(string where, object parameters, string orderBy, int pageIndex, int pageSize, ref int total) where T : class, new()
         {
-            return _db.Queryable<T>().Where(where, parameters).OrderBy(orderBy).ToPageList(pageIndex, pageSize, ref total);
+            ISugarQueryable<T> r = _db.Queryable<T>();
+            if (!string.IsNullOrEmpty(where))
+                r = r.Where(where);
+            if (!string.IsNullOrEmpty(orderBy))
+                r = r.OrderBy(orderBy);
+
+            return r.ToPageList(pageIndex, pageSize, ref total);
         }
         /// <summary>
         /// 查询分页
@@ -208,9 +263,101 @@ namespace SqlSugarDao
         /// <returns></returns>
         public List<T> GetListPage<T>(Expression<Func<T, bool>> where, Expression<Func<T, object>> orderBy, int pageIndex, int pageSize, ref int total) where T : class, new()
         {
-            return _db.Queryable<T>().Where(where).OrderBy(orderBy).ToPageList(pageIndex, pageSize, ref total);
-        }
+            ISugarQueryable<T> r = _db.Queryable<T>();
+            if (where != null)
+                r = r.Where(where);
+            if (orderBy != null)
+                r = r.OrderBy(orderBy);
 
+            return r.ToPageList(pageIndex, pageSize, ref total);
+        }
+        #endregion
+
+        #region 多表查询
+        /// <summary>
+        /// 两表join
+        /// </summary>
+        /// <typeparam name="T">表1</typeparam>
+        /// <typeparam name="T2">表2</typeparam>
+        /// <typeparam name="TResult">返回的内容实体</typeparam>
+        /// <param name="joinExpression">连接条件</param>
+        /// <param name="where">查询条件</param>
+        /// <param name="orderBy">排序条件</param>
+        /// <param name="selectColumns">返回的实体字段</param>
+        /// <returns></returns>
+        public List<TResult> GetList<T, T2, TResult>(Expression<Func<T, T2, object[]>> joinExpression, Expression<Func<T, bool>> where, Expression<Func<T, T2, object>> orderBy, Expression<Func<T, T2, TResult>> selectColumns) where T : class, new()
+        {
+            //var pageJoin = db.Queryable<Student, School>((st, sc) => new object[] {
+            //  JoinType.Left,st.SchoolId==sc.Id
+            //})
+            //.Where(st => st.Id == 1)
+            //.Where(st => st.Id == 2)
+            //.Select((st, sc) => new { id = st.Id, name = sc.Name })
+            //.MergeTable().Where(XXX => XXX.id == 1).OrderBy("name asc").ToList();
+
+            ISugarQueryable<T, T2> q = _db.Queryable(joinExpression);
+            if (where != null)
+                q = q.Where(where);
+            if (orderBy != null)
+                q = q.OrderBy(orderBy);
+
+            return q.Select(selectColumns).ToList();
+        }
+        /// <summary>
+        /// 三表join
+        /// </summary>
+        /// <typeparam name="T">表1</typeparam>
+        /// <typeparam name="T2">表2</typeparam>
+        /// <typeparam name="T3">表3</typeparam>
+        /// <typeparam name="TResult">返回的内容实体</typeparam>
+        /// <param name="joinExpression">连接条件</param>
+        /// <param name="where">查询条件</param>
+        /// <param name="orderBy">排序条件</param>
+        /// <param name="selectColumns">返回的实体字段</param>
+        /// <returns></returns>
+        public List<TResult> GetList<T, T2, T3, TResult>(Expression<Func<T, T2, T3, object[]>> joinExpression, Expression<Func<T, bool>> where, Expression<Func<T, T2, object>> orderBy, Expression<Func<T, T2, T3, TResult>> selectColumns) where T : class, new()
+        {
+            // var list = db.Queryable<Student, School, Student>((st, sc, st2) => new object[] {
+            //   JoinType.Left,st.SchoolId==sc.Id,
+            //   JoinType.Left,st.SchoolId==st2.Id
+            // })
+            //.Where((st, sc, st2) => st2.Id == 1 || sc.Id == 1 || st.Id == 1)
+            //.OrderBy((sc) => sc.Id)
+            //.OrderBy((st, sc) => st.Name, OrderByType.Desc)
+            //.Select((st, sc, st2) => new { st = st, sc = sc }).ToList();
+
+            ISugarQueryable<T, T2, T3> q = _db.Queryable(joinExpression);
+            if (where != null)
+                q = q.Where(where);
+            if (orderBy != null)
+                q = q.OrderBy(orderBy);
+
+            return q.Select(selectColumns).ToList();
+        }
+        /// <summary>
+        /// 四表join
+        /// </summary>
+        /// <typeparam name="T">表1</typeparam>
+        /// <typeparam name="T2">表2</typeparam>
+        /// <typeparam name="T3">表3</typeparam>
+        /// <typeparam name="T4">表4</typeparam>
+        /// <typeparam name="TResult">返回的内容实体</typeparam>
+        /// <param name="joinExpression">连接条件</param>
+        /// <param name="where">查询条件</param>
+        /// <param name="orderBy">排序条件</param>
+        /// <param name="selectColumns">返回的实体字段</param>
+        /// <returns></returns>
+        public List<TResult> GetList<T, T2, T3, T4, TResult>(Expression<Func<T, T2, T3, T4, object[]>> joinExpression, Expression<Func<T, bool>> where, Expression<Func<T, T2, object>> orderBy, Expression<Func<T, T2, T3, T4, TResult>> selectColumns) where T : class, new()
+        {
+            ISugarQueryable<T, T2, T3, T4> q = _db.Queryable(joinExpression);
+            if (where != null)
+                q = q.Where(where);
+            if (orderBy != null)
+                q = q.OrderBy(orderBy);
+
+            return q.Select(selectColumns).ToList();
+        }
+        #endregion
 
         #region Ado操作，执行sql语句
         /// <summary>

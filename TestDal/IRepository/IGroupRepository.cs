@@ -60,5 +60,8 @@ namespace TestDal
         List<GroupInfo> GetList(string where, object parameters, int pageIndex, int pageSize, string orderBy, ref int total);
 
         List<GroupInfo> GetList(string sql, object parameters);
+
+        List<UserView> GetList();
+        List<UserView> GetList2();
     }
 }

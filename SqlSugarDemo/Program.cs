@@ -41,23 +41,32 @@ namespace SqlSugarDemo
                 ////r = IocContainer.Resolve<IGroupRepository>().Edit(group1);
                 //r = IocContainer.Resolve<IGroupRepository>().EditColumns(group1);
 
-                var l = IocContainer.Resolve<IGroupRepository>().Get(25);
+                ////get by id
+                //var l = IocContainer.Resolve<IGroupRepository>().Get(25);
 
-                //var n = IocContainer.Resolve<IGroupRepository>().Delete(new int[] { 18, 19, 20, 21, 22, 23 }, false);
+                ////delete
+                ////var n = IocContainer.Resolve<IGroupRepository>().Delete(new int[] { 18, 19, 20, 21, 22, 23 }, false);
 
-                int total = 0;
-                var list = IocContainer.Resolve<IGroupRepository>().GetList("id>@id", new { id = 10 }, 1, 30, "id asc", ref total);
+                ////page
+                //int total = 0;
+                //var list = IocContainer.Resolve<IGroupRepository>().GetList("id>@id", new { id = 10 }, 1, 30, "id asc", ref total);
 
+                ////by sql
                 //var sql = "select * from groupinfo where id>@id ";
                 //var dic = new Dictionary<string, object>();
                 //dic.Add("id", 0);
                 //list = IocContainer.Resolve<IGroupRepository>().GetList(sql, dic);
 
+                ////by sql
                 //var sql1 = "select * from groupinfo where id>@id and groupname = @name";
                 //var list1 = IocContainer.Resolve<IGroupRepository>().GetList(sql1, new { id = 0, name = "testsqlsugar25" });
 
+                ////count
                 //var count = IocContainer.Resolve<IGroupRepository>().GetCount("id>@id", new { id = 0 });
 
+                //join
+                var uv = IocContainer.Resolve<IGroupRepository>().GetList();
+                var uv2 = IocContainer.Resolve<IGroupRepository>().GetList2();
             }
             catch (Exception ex)
             {

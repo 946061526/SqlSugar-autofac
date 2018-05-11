@@ -61,5 +61,19 @@ namespace TestDal
         {
             return DataAccessProxy.SqlQuery<GroupInfo>(sql, obj) as List<GroupInfo>;
         }
+
+        public List<UserView> GetList()
+        {
+            return DataAccessProxy.GetList<UserInfo, GroupInfo, UserView>((st, sc) => new object[] {
+              SqlSugar.JoinType.Left,st.GroupID==sc.Id
+            }, st => st.Id == 1, (st, sc) => st.Id, (st, sc) => new UserView { Id = st.Id, CnName = st.CnName, GroupName = sc.GroupName });
+        }
+        public List<UserView> GetList2()
+        {
+            return DataAccessProxy.GetList<UserInfo, GroupInfo, DeptInfo, UserView>((st, sc, sd) => new object[] {
+              SqlSugar.JoinType.Left,st.GroupID==sc.Id,
+              SqlSugar.JoinType.Left,st.DeptID==sd.Id
+            }, (st => st.Id == 1), null, (st, sc, sd) => new UserView { Id = st.Id, CnName = st.CnName, GroupName = sc.GroupName, DeptName = sd.DeptName });
+        }
     }
 }
