@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SqlSugarDao
 {
@@ -92,6 +89,18 @@ namespace SqlSugarDao
         public static int Edit<T>(T entity) where T : class, new()
         {
             return _dataAccess.Edit(entity);
+        }
+        /// <summary>
+        /// 编辑
+        /// </summary>
+        /// <typeparam name="T">表实体</typeparam>
+        /// <param name="entity">实体内容</param>
+        /// <param name="columns">要编辑的列</param>
+        /// <param name="where">条件</param>
+        /// <returns>受影响行数</returns>
+        public static int Edit<T>(T entity, Expression<Func<T, T>> columns, Expression<Func<T, bool>> where) where T : class, new()
+        {
+            return _dataAccess.Edit(entity, columns, where);
         }
         /// <summary>
         /// 查询单个实体

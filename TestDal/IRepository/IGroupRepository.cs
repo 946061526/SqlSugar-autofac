@@ -47,6 +47,7 @@ namespace TestDal
         /// <param name="entity">实体内容</param>
         /// <returns>受影响行数</returns>
         int Edit(GroupInfo entity);
+        int EditColumns(GroupInfo entity);
         /// <summary>
         /// 查询单个实体
         /// </summary>
@@ -57,7 +58,7 @@ namespace TestDal
         int GetCount(string where, object parameters);
         List<GroupInfo> GetList(string where, object parameters, string orderBy);
         List<GroupInfo> GetList(string where, object parameters, int pageIndex, int pageSize, string orderBy, ref int total);
-        
+
         List<GroupInfo> GetList(string sql, object parameters);
     }
 }

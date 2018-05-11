@@ -36,7 +36,10 @@ namespace TestDal
         {
             return DataAccessProxy.Edit(entity);
         }
-
+        public int EditColumns(GroupInfo entity)
+        {
+            return DataAccessProxy.Edit(entity, it => new GroupInfo() { GroupName = entity.GroupName }, it => it.Id == entity.Id);
+        }
         public GroupInfo Get(int id)
         {
             return DataAccessProxy.Get<GroupInfo>(id);

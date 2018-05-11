@@ -37,15 +37,16 @@ namespace SqlSugarDemo
                 //r = IocContainer.Resolve<IGroupRepository>().Add(group);
 
                 ////edit
-                //group = new GroupInfo() { Id = 25, GroupName = "testsqlsugar25", Remark = "test25" };
-                //r = IocContainer.Resolve<IGroupRepository>().Edit(group);
+                //var group1 = new GroupInfo() { Id = 25, GroupName = "group25", Remark = "test25" };
+                ////r = IocContainer.Resolve<IGroupRepository>().Edit(group1);
+                //r = IocContainer.Resolve<IGroupRepository>().EditColumns(group1);
 
-                //var l = IocContainer.Resolve<IGroupRepository>().Get(25);
+                var l = IocContainer.Resolve<IGroupRepository>().Get(25);
 
                 //var n = IocContainer.Resolve<IGroupRepository>().Delete(new int[] { 18, 19, 20, 21, 22, 23 }, false);
 
-                //int total = 0;
-                //var list = IocContainer.Resolve<IGroupRepository>().GetList("id>@id", new { id = 0 }, 1, 30, "id asc", ref total);
+                int total = 0;
+                var list = IocContainer.Resolve<IGroupRepository>().GetList("id>@id", new { id = 10 }, 1, 30, "id asc", ref total);
 
                 //var sql = "select * from groupinfo where id>@id ";
                 //var dic = new Dictionary<string, object>();
